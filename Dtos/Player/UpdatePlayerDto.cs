@@ -1,9 +1,8 @@
 namespace GameScoresApi.Dtos.Player;
 
-public class PlayerDto
+public class UpdatePlayerDto
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public DateTime CreatedAt { get; init; }
     public DateTime ModifiedAt { get; set; }
 }

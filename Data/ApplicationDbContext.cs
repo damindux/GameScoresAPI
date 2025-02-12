@@ -27,5 +27,15 @@ public class ApplicationDbContext(DbContextOptions options) : IdentityDbContext<
             .Property(s => s.ModifiedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql("GETDATE()");
+        
+        builder.Entity<Player>()
+            .Property(s => s.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("GETDATE()");
+        
+        builder.Entity<Player>()
+            .Property(s => s.ModifiedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("GETDATE()");
     }
 }

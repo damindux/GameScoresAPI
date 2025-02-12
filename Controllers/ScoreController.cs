@@ -1,5 +1,4 @@
-﻿using GameScoresApi.Data;
-using GameScoresApi.Dtos.Score;
+﻿using GameScoresApi.Dtos.Score;
 using GameScoresApi.Interfaces;
 using GameScoresApi.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +7,7 @@ namespace GameScoresApi.Controllers;
 
 [Route("api/scores")]
 [ApiController]
-public class ScoreController(ApplicationDbContext context, IScoreRepository scoreRepository) : ControllerBase
+public class ScoreController(IPlayerRepository playerRepository, IScoreRepository scoreRepository) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<ScoreDto>>> GetAllScores() =>
@@ -27,8 +26,7 @@ public class ScoreController(ApplicationDbContext context, IScoreRepository scor
     [HttpPost]
     public async Task<ActionResult<ScoreDto>> CreateScore([FromBody] CreateScoreDto createScoreDto)
     {
-        // TODO: Factor out the database operations for the player
-        var player = await context.Players.FindAsync(createScoreDto.PlayerId);
+        var player = await playerRepository.GetByIdAsync(createScoreDto.PlayerId);
         if (player == null) return NotFound("Player not found");
         
         var scoreModel = createScoreDto.FromCreateScoreDto(player);
@@ -41,8 +39,7 @@ public class ScoreController(ApplicationDbContext context, IScoreRepository scor
     {
         if (id <= 0) return BadRequest("Invalid score ID");
         
-        // TODO: Factor out the database operations for the player
-        var player = await context.Players.FindAsync(updateScoreDto.PlayerId);
+        var player = await playerRepository.GetByIdAsync(id);
         if (player == null) return NotFound("Player not found");
         
         return (await scoreRepository.UpdateAsync(id, updateScoreDto)) is { } score

@@ -1,4 +1,3 @@
-using GameScoresApi.Data;
 using GameScoresApi.Dtos.Score;
 using GameScoresApi.Models;
 
